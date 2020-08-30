@@ -16,5 +16,5 @@ public interface BookApiClient {
     Call<Page<Book>> getBooks(@Query("page") int page, @HeaderMap Map<String, String> headers);
 
     @GET("/api/books/{id}")
-    Call<Book> getOneBook(@Path("id") String bookId, @HeaderMap Map<String, String> headers);
+    Call<Book> getOneBook(@Path("id") Integer bookId, @HeaderMap Map<String, String> headers);
 }

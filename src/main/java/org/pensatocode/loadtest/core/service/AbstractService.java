@@ -25,12 +25,13 @@ import java.util.stream.IntStream;
 @Slf4j
 public abstract class AbstractService implements AutoCloseable {
 
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(2 * Runtime.getRuntime().availableProcessors());
+    private final ExecutorService executorService;
 
     protected final Retrofit retrofit;
 
     protected AbstractService(Retrofit retrofit) {
         this.retrofit = retrofit;
+        this.executorService = Executors.newFixedThreadPool(2 * Runtime.getRuntime().availableProcessors());
     }
 
     Supplier<Duration> taskSupplier = () -> {
@@ -39,13 +40,13 @@ public abstract class AbstractService implements AutoCloseable {
             internalTask();
             Instant end = Instant.now();
             return Duration.between(start, end);
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             log.warn("Task error: " + e.getMessage());
             return null;
         }
     };
 
-    public abstract void internalTask() throws IOException;
+    public abstract void internalTask() throws IOException, InterruptedException;
 
     public DescriptiveStatistics runLoadTest(int numberOfExecutions) throws ExecutionException, InterruptedException {
         // Initialize tasks
