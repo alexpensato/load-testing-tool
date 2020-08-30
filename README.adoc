@@ -1,0 +1,39 @@
+== Load Testing Tool for Spring Projects
+
+This is a simple load-testing tool written in Java for https://en.wikipedia.org/wiki/Representational_state_transfer[RESTful APIs].
+
+It comes with an example based on https://projects.spring.io/spring-framework[Spring framework]'s **Pageable** requests
+and **Page** responses. This example has been written to connect with a localhost running our
+https://github.com/alexpensato/spring-simplicity-java-sample[Spring Simplicity Sample]'s **Books** endpoint.
+Because this host has been based on https://spring.io/projects/spring-boot[Spring Boot] and
+https://www.postgresql.org/[Relational Databases], you can easily clone its git repository and run it.
+
+Project configuration has been based on properties files and contains examples of commonly used (default) headers,
+custom (modifiable) headers, and request-body parameters, among others.
+
+In order to run the example, simply start the host server and run the **LoadTestMain** class.
+
+== Dependencies
+
+* https://github.com/square/retrofit[Retrofit 2] client
+* https://commons.apache.org/proper/commons-math/[Apache Math & Statistics] library
+* https://github.com/FasterXML/jackson[Jackson] JSON parser
+
+== Future features
+
+In the future, we plan to have a customizable Web interface.
+
+== Contributions
+
+…are always welcome.
+Don’t hesitate to submit a https://github.com/alexpensato/load-testing-tool/issues[bug report] or a
+https://github.com/alexpensato/load-testing-tool/pulls[pull requests].
+
+When filling a bug report or submitting a new feature, please try including supporting test cases.
+
+
+== License
+
+This project has been licensed under http://www.apache.org/licenses/LICENSE-2.0.html[Apache License 2.0].
+
+Although it is a tested library, use at your risk!
