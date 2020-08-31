@@ -14,7 +14,13 @@ import java.util.List;
 @Slf4j
 public class PageTask<T> {
 
-    public void execute(Call<Page<T>> callSync) throws IOException {
+    private final Call<Page<T>> callSync;
+
+    private PageTask(Call<Page<T>> callSync) {
+        this.callSync = callSync;
+    }
+
+    public void execute() throws IOException {
         Instant start = Instant.now();
         Response<Page<T>> response = callSync.execute();
         Page<T> page = response.body();
@@ -28,5 +34,9 @@ public class PageTask<T> {
                 log.debug(item.toString());
             }
         }
+    }
+
+    public static <V> PageTask<V> createTask(Call<Page<V>> callSync) {
+        return new PageTask<>(callSync);
     }
 }

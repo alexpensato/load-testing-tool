@@ -13,7 +13,13 @@ import java.util.List;
 @Slf4j
 public class ListTask<T> {
 
-    public void execute(Call<List<T>> callSync) throws IOException {
+    private final Call<List<T>> callSync;
+
+    private ListTask(Call<List<T>> callSync) {
+        this.callSync = callSync;
+    }
+
+    public void execute() throws IOException {
         Instant start = Instant.now();
         Response<List<T>> response = callSync.execute();
         List<T> list = response.body();
@@ -26,5 +32,9 @@ public class ListTask<T> {
                 log.debug(item.toString());
             }
         }
+    }
+
+    public static <V> ListTask<V> createTask(Call<List<V>> callSync) {
+        return new ListTask<>(callSync);
     }
 }

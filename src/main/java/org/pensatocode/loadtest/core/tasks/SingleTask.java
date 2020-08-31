@@ -17,7 +17,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SingleTask<T> {
 
-    public void execute(Call<T> callSync) throws IOException {
+    private final Call<T> callSync;
+
+    private SingleTask(Call<T> callSync) {
+        this.callSync = callSync;
+    }
+
+    public void execute() throws IOException {
         Instant start = Instant.now();
         Response<T> response = callSync.execute();
         Instant end = Instant.now();
@@ -44,6 +50,9 @@ public class SingleTask<T> {
                 log.debug(mapAsString);
             }
         }
+    }
 
+    public static <V> SingleTask<V> createTask(Call<V> callSync) {
+        return new SingleTask<>(callSync);
     }
 }
