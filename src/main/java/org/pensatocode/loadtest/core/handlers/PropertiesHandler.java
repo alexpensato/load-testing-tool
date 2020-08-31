@@ -108,6 +108,10 @@ public class PropertiesHandler {
         return Integer.parseInt(initializers.get(key));
     }
 
+    public boolean getInitialParamAsBoolean(String key) {
+        return Boolean.parseBoolean(initializers.get(key));
+    }
+
     public List<String> getPathParamsFor(String label) {
         return pathParams.get(label);
     }
