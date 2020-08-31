@@ -2,6 +2,7 @@ package org.pensatocode.loadtest.core.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.pensatocode.loadtest.core.handlers.PropertiesHandler;
 import retrofit2.Retrofit;
 
 import java.io.IOException;
@@ -37,7 +38,7 @@ public abstract class AbstractService implements AutoCloseable {
     Supplier<Duration> taskSupplier = () -> {
         try {
             Instant start = Instant.now();
-            internalTask();
+            serviceTask();
             Instant end = Instant.now();
             return Duration.between(start, end);
         } catch (IOException | InterruptedException e) {
@@ -46,7 +47,7 @@ public abstract class AbstractService implements AutoCloseable {
         }
     };
 
-    public abstract void internalTask() throws IOException, InterruptedException;
+    public abstract void serviceTask() throws IOException, InterruptedException;
 
     public DescriptiveStatistics runLoadTest(int numberOfExecutions) throws ExecutionException, InterruptedException {
         // Initialize tasks
@@ -68,10 +69,12 @@ public abstract class AbstractService implements AutoCloseable {
                 errorCount++;
                 continue;
             }
-            System.out.println(String.format("Task duration is %d milliseconds.",duration.toMillis()));
+            if (PropertiesHandler.getInstance().getInitialParamAsBoolean("print_info_log")) {
+                log.info(String.format("Task duration is %d milliseconds.", duration.toMillis()));
+            }
             stats.addValue(duration.toMillis());
         }
-        System.out.println(String.format("Error count is %d.",errorCount));
+        log.info(String.format("Error count is %d.",errorCount));
         return stats;
     }
 
