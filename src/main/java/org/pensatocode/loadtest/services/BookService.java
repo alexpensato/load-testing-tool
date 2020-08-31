@@ -1,9 +1,13 @@
 package org.pensatocode.loadtest.services;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.pensatocode.loadtest.clients.BookApiClient;
 import org.pensatocode.loadtest.core.handlers.PropertiesHandler;
 import org.pensatocode.loadtest.core.service.AbstractService;
+import org.pensatocode.loadtest.core.tasks.PageTask;
+import org.pensatocode.loadtest.core.tasks.SingleTask;
+import org.pensatocode.loadtest.core.util.StatsUtil;
 import org.pensatocode.loadtest.models.Book;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
@@ -14,6 +18,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -27,15 +32,21 @@ public class BookService extends AbstractService {
     }
 
     @Override
-    public void internalTask() throws IOException, InterruptedException {
+    public void serviceTask() throws IOException, InterruptedException {
         BookApiClient bookApiClient = retrofit.create(BookApiClient.class);
         Integer pathId = queue.poll(2, TimeUnit.SECONDS);
-        Call<Book> callSync = bookApiClient.getOneBook(pathId, PropertiesHandler.getInstance().getHeaders());
-        Response<Book> response = callSync.execute();
-        Book book = response.body();
         queue.offer(pathId, 2, TimeUnit.SECONDS);
-        assert book != null;
-        log.debug(book.toString());
+        new SingleTask<Book>().execute(bookApiClient.getOneBook(pathId, PropertiesHandler.getInstance().getHeaders()));
+    }
+
+    public static void run(Retrofit retrofit, PropertiesHandler handler) {
+        try (BookService service = new BookService(retrofit)) {
+            service.loadParamsQueue(handler.getInitialParamAsInt("initial_capacity"));
+            DescriptiveStatistics stats = service.runLoadTest(handler.getInitialParamAsInt("number_of_executions"));
+            StatsUtil.printStats(stats, handler.getInitialParam("book_label"));
+        } catch (InterruptedException| ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     public void loadParamsQueue(int initialCapacity) {
