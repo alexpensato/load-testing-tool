@@ -15,27 +15,27 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Page<T> {
     @JsonProperty("content")
-    public List<T> content = null;
+    private List<T> content = null;
     @JsonProperty("pageable")
-    public Pageable pageable;
+    private Pageable pageable;
     @JsonProperty("totalPages")
-    public int totalPages;
+    private int totalPages;
     @JsonProperty("last")
-    public boolean last;
+    private boolean last;
     @JsonProperty("totalElements")
-    public int totalElements;
+    private int totalElements;
     @JsonProperty("first")
-    public boolean first;
+    private boolean first;
     @JsonProperty("size")
-    public int size;
+    private int size;
     @JsonProperty("number")
-    public int number;
+    private int number;
     @JsonProperty("sort")
-    public Sort sort;
+    private Sort sort;
     @JsonProperty("numberOfElements")
-    public int numberOfElements;
+    private int numberOfElements;
     @JsonProperty("empty")
-    public boolean empty;
+    private boolean empty;
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();

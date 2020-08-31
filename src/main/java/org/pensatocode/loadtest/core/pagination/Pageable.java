@@ -12,15 +12,15 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Pageable {
     @JsonProperty("sort")
-    public Sort sort;
+    private Sort sort;
     @JsonProperty("pageNumber")
-    public int pageNumber;
+    private int pageNumber;
     @JsonProperty("pageSize")
-    public int pageSize;
+    private int pageSize;
     @JsonProperty("offset")
-    public int offset;
+    private int offset;
     @JsonProperty("unpaged")
-    public boolean unpaged;
+    private boolean unpaged;
     @JsonProperty("paged")
-    public boolean paged;
+    private boolean paged;
 }
