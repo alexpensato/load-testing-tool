@@ -9,6 +9,7 @@ import org.pensatocode.loadtest.core.tasks.PageTask;
 import org.pensatocode.loadtest.core.tasks.SingleTask;
 import org.pensatocode.loadtest.core.util.StatsUtil;
 import org.pensatocode.loadtest.models.Book;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -27,7 +28,7 @@ public class BookService extends AbstractService {
 
     private BlockingQueue<Integer> queue;
 
-    public BookService(Retrofit retrofit) {
+    public BookService(@Autowired Retrofit retrofit) {
         super(retrofit);
     }
 

@@ -8,6 +8,7 @@ import org.pensatocode.loadtest.core.service.AbstractService;
 import org.pensatocode.loadtest.core.tasks.PageTask;
 import org.pensatocode.loadtest.core.util.StatsUtil;
 import org.pensatocode.loadtest.models.Book;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import retrofit2.Retrofit;
 
@@ -18,7 +19,7 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class PageOfBooksService extends AbstractService {
 
-    public PageOfBooksService(Retrofit retrofit) {
+    public PageOfBooksService(@Autowired Retrofit retrofit) {
         super(retrofit);
     }
 
