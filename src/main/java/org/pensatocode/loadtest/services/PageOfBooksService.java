@@ -7,7 +7,6 @@ import org.pensatocode.loadtest.core.handlers.PropertiesHandler;
 import org.pensatocode.loadtest.core.service.AbstractService;
 import org.pensatocode.loadtest.core.tasks.PageTask;
 import org.pensatocode.loadtest.core.util.StatsUtil;
-import org.pensatocode.loadtest.models.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import retrofit2.Retrofit;
@@ -26,7 +25,8 @@ public class PageOfBooksService extends AbstractService {
     @Override
     public void serviceTask() throws IOException {
         BookApiClient bookApiClient = retrofit.create(BookApiClient.class);
-        new PageTask<Book>().execute(bookApiClient.getBooks(0, PropertiesHandler.getInstance().getHeaders()));
+        var task = PageTask.createTask(bookApiClient.getBooks(0, PropertiesHandler.getInstance().getHeaders()));
+        task.execute();
     }
 
     public static void run(Retrofit retrofit, PropertiesHandler handler) {

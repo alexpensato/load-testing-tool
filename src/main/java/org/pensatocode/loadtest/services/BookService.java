@@ -5,14 +5,10 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.pensatocode.loadtest.clients.BookApiClient;
 import org.pensatocode.loadtest.core.handlers.PropertiesHandler;
 import org.pensatocode.loadtest.core.service.AbstractService;
-import org.pensatocode.loadtest.core.tasks.PageTask;
 import org.pensatocode.loadtest.core.tasks.SingleTask;
 import org.pensatocode.loadtest.core.util.StatsUtil;
-import org.pensatocode.loadtest.models.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 import java.io.IOException;
@@ -37,7 +33,8 @@ public class BookService extends AbstractService {
         BookApiClient bookApiClient = retrofit.create(BookApiClient.class);
         Integer pathId = queue.poll(2, TimeUnit.SECONDS);
         queue.offer(pathId, 2, TimeUnit.SECONDS);
-        new SingleTask<Book>().execute(bookApiClient.getOneBook(pathId, PropertiesHandler.getInstance().getHeaders()));
+        var task = SingleTask.createTask(bookApiClient.getOneBook(pathId, PropertiesHandler.getInstance().getHeaders()));
+        task.execute();
     }
 
     public static void run(Retrofit retrofit, PropertiesHandler handler) {
