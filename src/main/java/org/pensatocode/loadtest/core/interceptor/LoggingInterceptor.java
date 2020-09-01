@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
+/**
+ * See: https://square.github.io/okhttp/interceptors/
+ */
 @Slf4j
 public class LoggingInterceptor implements Interceptor {
     @Override public Response intercept(Interceptor.Chain chain) throws IOException {
